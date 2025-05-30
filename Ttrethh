@@ -1,0 +1,832 @@
+local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+function hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk(data) m=string.sub(data, 0, 55) data=data:gsub(m,'')
+
+data = string.gsub(data, '[^'..b..'=]', '') return (data:gsub('.', function(x) if (x == '=') then return '' end local r,f='',(b:find(x)-1) for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end return r; end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x) if (#x ~= 8) then return '' end local c=0 for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end return string.char(c) end)) end
+
+
+ 
+
+
+--[[
+Enhanced Roblox Anti-Cheat Analysis Tool (Educational)
+Version: 2.0 - Realistic Analysis
+
+This script provides an advanced, realistic educational tool for analyzing anti-cheat systems
+in Roblox games. It incorporates sophisticated detection, real-world patterns, and a professional UI.
+
+IMPORTANT: This tool is for EDUCATIONAL PURPOSES ONLY. It is designed to help understand
+how anti-cheat systems work, not to bypass or disable them. Use responsibly and ethically.
+]]
+
+-- Services
+local Players = game:GetService(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('bNGzjPOkTtauRyvVoqSsPSfnSgwAXFvcjsiPyFWCHIRfXQFfaJrWNJgUGxheWVycw=='))
+local RunService = game:GetService(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('bqRhIqSBWGffQLCPIfXFezKQUyMsvyqTPbsFykQhumQQssZfcdzTzoyUnVuU2VydmljZQ=='))
+local TextService = game:GetService(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('PipfyfNUoaUaprKQWKIUYLHcIjYLEjtCDAInHekHcaqxSvaofSzRpoUVGV4dFNlcnZpY2U='))
+local UserInputService = game:GetService(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('itpZZRGMQmSpjHGaIIigaBiWKGNQlRIstVcIFLryvJXdUSvEbfaxNrbVXNlcklucHV0U2VydmljZQ=='))
+local CoreGui = game:GetService(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('CntlnMEjyOJrlYnKqAUOkJrAwIcogqoqLwBJeiWvUteBLIkxGiJkhaXQ29yZUd1aQ=='))
+
+-- Constants
+local LOCAL_PLAYER = Players.LocalPlayer
+local TOOL_NAME = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('PUGLqIFyxMeeshhxFfrGQYEUqoijkrWqRzsjCDPkZHdQNmDaaFWsZHxRW5oYW5jZWQgQW50aS1DaGVhdCBBbmFseXplcg==')
+local TOOL_VERSION = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('mkutBRHWGTXQGpzIqRgyQTEBbjMQybUhwtIFRYoJUoGDprTaifFJuFQMi4w')
+
+--[[----------------------------------------------------------------------------
+--                             CONFIGURATION MODULE
+----------------------------------------------------------------------------]]
+
+local ConfigurationModule = {}
+ConfigurationModule.__index = ConfigurationModule
+
+function ConfigurationModule.new()
+    local self = setmetatable({}, ConfigurationModule)
+    self.settings = {
+        scanDepth = 75,
+        ruleSensitivity = 0.6, -- Default sensitivity
+        maxInstancesPerFrame = 100, -- Performance tuning
+        enableObfuscationDetection = true,
+        enableBehavioralAnalysis = true,
+    }
+    self.baseDetectionRules = {} -- Load base rules here
+    self.customRules = {} -- Load custom rules if implemented
+    self:loadBaseRules() -- Load default rules on init
+    return self
+end
+
+function ConfigurationModule:loadSettings()
+    -- Placeholder for loading settings from storage (e.g., DataStore or local file if exploit allows)
+end
+
+function ConfigurationModule:saveSettings()
+    -- Placeholder for saving settings
+end
+
+function ConfigurationModule:loadBaseRules()
+    -- Define base detection rules based on research
+    self.baseDetectionRules = {
+        -- Naming Patterns
+        { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('mgbvPGoFAPFqrKHaxMZnFqHnBRrsQXtmikNwhbRBUYaEfFQNHoeiIUyQUNfTmFtZVBhdHRlcm4='), category=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('llJJeCPKEQfiLXyKyUiPRlZhaeNGJuXDJcxVmfqVavbzbYRTOFDMmuWTmFtaW5n'), sensitivity=0.3, description=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('WvAwwHgrqMtDGQDhdTqWtHJYIgNMjTSnkJEeUtEDmuGpkfuYjLVOjrjSW5zdGFuY2UgbmFtZSBjb250YWlucyBjb21tb24gYW50aS1jaGVhdCBrZXl3b3Jkcw=='), evaluate=function(data) 
+            local keywords = {hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('pXZmOcOpQcxcSdDNrPKpAtVUzZsANPzPJcDrckzZwthfzGqedEXbZlSYW50aQ=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('JglheWAjFhyAgobudNUjfSpEUqbsuyGLFpezRcUxSwqYffbLESnffsvY2hlYXQ='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('GqXbgmhvGiLAkrEHOFuAiIhXNoBRqTnQctLXDWZpEcBXGzxPTeRtkpgZGV0ZWN0'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TytDNKCYQsyDbGUCzVVWOTzKkwUHQhjPPjWoKomZYGQcbfglnZKwfnnY2hlY2s='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('RlPRfAbEZTUROuyIKbhMGwRgyvEmhDRlFoLjtAqlKqCjxkrqQezQjyUc2VjdXJl'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('VZfvIdflUgDLVBOZiXneGfkiTODdJDHnZCLQPVSqQAUbTzsmICiypzhdmVyaWZ5'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('MNaFwUYCxwARCiUUnFMBLKdgXXStEQpqqobXnjJueoixjYJocrhXZHAcHJvdGVjdA=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('YTNOJrPHvSsGkMWlEvGLPUnXUYexMGZatHiwAEDTOvCQNduLJcMTvPDZ3VhcmQ='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ltFUQaEcbwPqiqJzbHQIQxPpaDCWsEsQyKVAguDXlzIluZjOKXrpkaDc2hpZWxk'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('JlgBuTWIKdGWNNNtXwKEUejiYZvkapyIbNQDJfqvyuoCTLiDSOZhosBYmFu'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('BjSJBPsompHlgznvDdtNcfXalYEmiWlmxNsHbJblgzZQHwrPdAShdAza2ljaw=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('mdXzZSXweYgMNuHTNeyWBouHsgwNkMxJcbRoBAYEcNyrBmzhBckTwijd2FyZGVu'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('QPvSEjpedddslTSNcPsacesEakdvYhyeVtXFduPzUaUrXLxUkPCcwzjdmFsa3lyaWU=')}
+            local nameLower = string.lower(data.name)
+            for _, kw in ipairs(keywords) do
+                if string.find(nameLower, kw, 1, true) then return {detected=true, confidence=0.3, evidence=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('jdvwOhgVzolpdkydEzdqDjhaQCXVIehfHKetqNAQyjnJwdYHJiHfeBeTmFtZTog')..data.name} end
+            end
+            return {detected=false}
+        end },
+        -- Script Patterns (Basic)
+        { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ArqFYwxUQDDVPTINIkwnuzIcYrcrDaWoFAtGNiJrlmcWUWSMgcAtIQIQUNfTWV0YW1ldGhvZEhvb2s='), category=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('rPNDkmHUdELJrClEqlOBPghvxStAJkMLsUWbYPUVEmIweGlqbaqJkPkU2NyaXB0aW5n'), sensitivity=0.7, description=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('wSvikdhsxSYabDKOccnugYTPKaqAqogTAHuBQnQdlaEZpVaZHKMUWZtU2NyaXB0IHBvdGVudGlhbGx5IGhvb2tzIG1ldGFtZXRob2Rz'), evaluate=function(data)
+            if not data.source or not data.isScript then return {detected=false} end
+            local keywords = {hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('QsPskIZvfSsADvtiNswdybAZejrisnZTMUAahVQvnYgULYLWvWfAQLsaG9va21ldGFtZXRob2Q='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('pcVKIMuQECFzwiBOqzzKUDYgXDxdnnCBJzkPZvEGqORDRjUyiptFzAgX19uYW1lY2FsbA=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('nkSoUKqcylzuQPKVUBZpTeVsaEYuEXNQCEGDsEAaVijrghsTsOHKjXPZ2V0bmFtZWNhbGxtZXRob2Q='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('iPFTbIFgYJQnDrVTInXHcpMHHUIhhRUVNOiNWTcNTIYFdGFxYxWdvNKc2V0bWV0YXRhYmxl'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('BQOOnGVAZRLSkTVFRXcnlfuQanePkIGYLJALkDTTTXLySYOiojRWjHtZ2V0cmF3bWV0YXRhYmxl')}
+            for _, kw in ipairs(keywords) do
+                if string.find(data.source, kw, 1, true) then return {detected=true, confidence=0.7, evidence=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('rVZysfSfsQWQvbnMxYcmgeOjHYXAkpdeVmbwRlNPERuKayjxrzxnnnpS2V5d29yZDog')..kw} end
+            end
+            return {detected=false}
+        end },
+        { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('vkMSoqvfcmRNZOBEmEigcjTFWAxfXbjHYHMZJntzHNoVXcgVMVGcgEFQUNfUHJvdGVjdGVkU291cmNl'), category=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('KsVFgLniTKQBlDuLQapZNHAoALrauvWmCTHgjHyUVTAbwhkapSSZGMJT2JmdXNjYXRpb24='), sensitivity=0.6, description=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('OqtluFmDdReAvluFAcuSzIUJaQVuWVsSdftePNocreAPFJSdYwyHABVU2NyaXB0IHNvdXJjZSBpcyBpbmFjY2Vzc2libGUgb3IgcHJvdGVjdGVk'), evaluate=function(data)
+            if data.isScript and (not data.source or data.source == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('fYympLtzcyCfjFFdethkSgxJGpITItfRqpQiSJKlNEbnHePHmWieyzGLy8gU291cmNlIGNvZGUgbm90IGFjY2Vzc2libGU=')) then
+                return {detected=true, confidence=0.6, evidence=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('XdiczsAFaXiwXXmwwrahGkEeKctzBgERaAGHquJDnweUxxATPUPxrTiU291cmNlIGluYWNjZXNzaWJsZQ==')}
+            end
+            return {detected=false}
+        end },
+        -- Remote Patterns
+        { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('RFNgjfoFVhVMsKoSWMZxUpegZBFDxcPJqLRqGgcadzFZsAHSpUqqiZzQUNfUmVtb3RlVmFsaWRhdGlvbk5hbWU='), category=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('RiYThIQjJtdzDFxpzuzRPygLehqDuRTljzbNKVeHYZbHLgwjnsSXzDZTmV0d29ya2luZw=='), sensitivity=0.5, description=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('xoZNLpYACMcTwCLpmEPqHQnvpBofCByGcudkUJUgQRyAFqJUYNkBAMaUmVtb3RlRXZlbnQvRnVuY3Rpb24gbmFtZSBzdWdnZXN0cyB2YWxpZGF0aW9uIHB1cnBvc2U='), evaluate=function(data)
+            if data.isRemote and data.properties and data.properties.isAntiCheatRelated then
+                 return {detected=true, confidence=0.5, evidence=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('rEhJrYQcCTBDugpUIuYLYyCNBMjcMCbkTYqpBsztEBxWhoSOxWDPZIHTmFtZTog')..data.name}
+            end
+            return {detected=false}
+        end },
+        -- Add more sophisticated rules based on research_findings.md
+        -- e.g., Obfuscation detection, specific API usage, structural patterns
+    }
+end
+
+function ConfigurationModule:loadCustomRules()
+    -- Placeholder for loading user-defined rules
+end
+
+function ConfigurationModule:getEffectiveRules()
+    local effectiveRules = {}
+    for _, rule in ipairs(self.baseDetectionRules) do table.insert(effectiveRules, rule) end
+    for _, rule in ipairs(self.customRules) do table.insert(effectiveRules, rule) end
+    return effectiveRules
+end
+
+--[[----------------------------------------------------------------------------
+--                           ADVANCED SCANNER ENGINE
+----------------------------------------------------------------------------]]
+
+local AdvancedScannerEngine = {}
+AdvancedScannerEngine.__index = AdvancedScannerEngine
+
+function AdvancedScannerEngine.new(config)
+    local self = setmetatable({}, AdvancedScannerEngine)
+    self.config = config
+    self.scannedData = { instances = {}, scripts = {}, remotes = {} } -- Use paths as keys
+    self.scanDepth = 0
+    self.scanStats = { total = 0, scripts = 0, remotes = 0, obfuscatedScripts = 0, errors = 0 }
+    self.obfuscationPatterns = {
+        -- Basic patterns (can be expanded)
+        { pattern = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('EYyHAshkvOBbHVLLKoxZHPXqgBdIsgoXyrMugZnIcbRTsHRFFDjZoVyXA==')\\x%x%x\hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('hVnsKvDzPiXPfygRJEIiBpyuyKLXBeLRrWxlDYoJBImuCQVahtNbUZI'), confidence = 0.2 }, -- Hex escapes
+        { pattern = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('BCEkqkNCJMkHDjXtcDeuigkHSgHGZOrYYtEjrLcFWCDTzVqcGmlZuQuc3RyaW5nJS5jaGFyJSglZCssJXMqJWQr'), confidence = 0.3 }, -- string.char sequences
+        { pattern = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TUvBLCLLdLRNpUohQAhlWTUIGXTjKBiveYSjRWZBcyWKTtrbNjAoHkibG9hZHN0cmluZw=='), confidence = 0.4 }, -- loadstring usage
+        { pattern = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('UWTEHAXfWWuSmAkXlzmWNAlSwhxHnfSJNcmKDvEUUEIqZtQqbzwCKvqZ2V0ZmVudg=='), confidence = 0.3 }, -- getfenv usage
+    }
+    return self
+end
+
+function AdvancedScannerEngine:safeGetFullName(instance)
+    local success, path = pcall(function() return instance:GetFullName() end)
+    return success and path or (hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('cSkWzrxcIkExzoiLjUgarAqUGXpeEZrmwsSyDCkOequuKYUuPZcBtCAVW5rbm93blBhdGhf') .. tostring(instance))
+end
+
+function AdvancedScannerEngine:isScript(instance)
+    return instance.ClassName == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('xLJwZuvwYhElCHImZNFAUtkVxeIkYFHeAwvClATvOeNoTWTUGWVTKmzU2NyaXB0') or instance.ClassName == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('GZIvAdoJfNCjePmvXNsXjhHUwRYNQXivucWDjWKiMqebGyMRFlbYVlCTG9jYWxTY3JpcHQ=') or instance.ClassName == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('nFSlbHKGUMuTijtNIImkMWHKBflgWJshIcROHmOfcgrVcotKYNLgdpUTW9kdWxlU2NyaXB0')
+end
+
+function AdvancedScannerEngine:isRemote(instance)
+    return instance.ClassName == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('PlFkBqrmZVVbWclQbTmbiSDNRKaATFEnYEKSmPQGnLEdYJHcPtmweKGUmVtb3RlRXZlbnQ=') or instance.ClassName == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('FnTBuVyigsxpwmQSDVuPzcnnLDqmhngIcWotaIYVuiqbcUiCIRNoKhUUmVtb3RlRnVuY3Rpb24=')
+end
+
+function AdvancedScannerEngine:safeGetSource(scriptInstance)
+    local success, source = pcall(function() return scriptInstance.Source end)
+    return success and source or hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('QyLXPpHAnXKVDFWkjVLAUtgwxgjkGqRaZZyMvBFSfwrxVzBypymQccVLy8gU291cmNlIGNvZGUgbm90IGFjY2Vzc2libGU=')
+end
+
+function AdvancedScannerEngine:checkObfuscation(source)
+    if not self.config.settings.enableObfuscationDetection or not source or #source < 100 then return false, 0 end
+    
+    local totalConfidence = 0
+    local detectedPatterns = {}
+    
+    -- Character frequency analysis (simple example)
+    local nonAscii = 0
+    for i = 1, #source do
+        if string.byte(source, i) > 127 then nonAscii = nonAscii + 1 end
+    end
+    if nonAscii / #source > 0.05 then 
+        totalConfidence = totalConfidence + 0.2
+        table.insert(detectedPatterns, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('EvzQZCXcHmxejCaYWsSYRNmCwBLgQDXOtQXXtYtnKYczygsQZxMMaVuSGlnaCBub24tQVNDSUkgY2hhcmFjdGVyIGZyZXF1ZW5jeQ=='))
+    end
+    
+    -- Regex patterns
+    for _, obfPattern in ipairs(self.obfuscationPatterns) do
+        if string.find(source, obfPattern.pattern) then
+            totalConfidence = totalConfidence + obfPattern.confidence
+            table.insert(detectedPatterns, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('xFJHURjOtkQTHwsBFnsewoiUNVwvDlVqAXtCmcGjGEMhwhPOokzBqOqUGF0dGVybjog') .. obfPattern.pattern)
+        end
+    end
+    
+    -- Very long lines
+    local lines = {}
+    for line in string.gmatch(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TzsLUwfLMlabjLqsQCODGNlCngmIZXXqeclAhZEipFoTyCiomqRpVShKFteDQpdKikNCj8=')) do table.insert(lines, line) end
+    for _, line in ipairs(lines) do
+        if #line > 500 then 
+            totalConfidence = totalConfidence + 0.1
+            table.insert(detectedPatterns, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('AgiqWmTXqIXatYVuHTEKkvnqFovxBECQVKSCtxCPjrWfoqtZUKnqrcbVmVyeSBsb25nIGxpbmUgZGV0ZWN0ZWQ='))
+            break 
+        end
+    end
+
+    totalConfidence = math.min(totalConfidence, 1.0)
+    return totalConfidence > 0.4, totalConfidence, table.concat(detectedPatterns, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('hHLgiMQxlYDHBistrhWQCpvRPtVWwLXXgwTnLRMtMMJpbRcyIETgzlkLCA='))
+end
+
+function AdvancedScannerEngine:analyzeScriptSyntax(source)
+    if not source then return {} end
+    local analysis = {
+        lineCount = 0,
+        functionCalls = 0,
+        loops = 0,
+        remoteFire = 0,
+        remoteInvoke = 0,
+        pcalls = 0
+    }
+    local lineCount = 0
+    for _ in string.gmatch(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('LtwsLjzlHHTyeokFQFEnUCRzcDrNTsBqscbaVyCjCAPkqBSDgIwwWwOXG4=')) do lineCount = lineCount + 1 end
+    analysis.lineCount = lineCount + 1
+    
+    -- Simple keyword counting (approximate)
+    analysis.functionCalls = select(2, string.gsub(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('nzMIMhtmwRsKiTiJroVOtlEYagfWtNSNPxnqMKkeAsOGhxTpvMHnKwqJS4ldyslcyolKA=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('pgHUkePUTyZOcegktfDLkSnGSkuiQWZQabuyiJuJqPgYblcfEqToygf')))
+    analysis.loops = select(2, string.gsub(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('RoTANfoYbjDLPyCqJOBEnqLYGbBgjHGHayPlLKVaAwHxqWcUdKRJPpdXGIod2hpbGV8Zm9yfHJlcGVhdClcYg=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('LcaBpfOqKfadreMBzMsaENhxydlVMJqhqrUhWlzbcmzGhkeXMWWOnZF')))
+    analysis.remoteFire = select(2, string.gsub(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('stZRKsCMPWhJotsBjwFjNYnXhkCQLzcDqgbVCXBvqvSekGrZcpFlXapOkZpcmVTZXJ2ZXIlcyolKA=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('XjLdwACuGBmopjeQmXvfZtBmZcJaOquVGUOdXfNoQFgygqzoebiuxOG'))) + select(2, string.gsub(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('WhzPjzEfqHYzTheakbNUzpftsmWCsUndLwgCjZSCQJsaVMowGmlRFkyOkZpcmVDbGllbnQlcyolKA=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('pGHNAvWvJgVMVaIgvTMshjEYUkQTCKrRmekUQSYrGZwZKZoBEdgIvdD')))
+    analysis.remoteInvoke = select(2, string.gsub(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('kUtXXIDinoqkWWuZcJmhbfgZxvEMzzfzQhJkvBKuoTyGrdFufJdDFseOkludm9rZVNlcnZlciVzKiUo'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('mByQRdnzoJrzdrLIWhNiBPvFpEPpDAmNSlIHHOOraRkooCQASksuGrw'))) + select(2, string.gsub(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('MMjrpooyHwDjQGvQSdisYLqxGXnBjQrEAIGrPwdAuuJdpCnAogAthUbOkludm9rZUNsaWVudCVzKiUo'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('nIJePRPjMbeJKVVkQDeEhDwYvMfuLFWmsjvWWEmzvCmjScjrNqKYByd')))
+    analysis.pcalls = select(2, string.gsub(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('GNfaozkZLvZkQEPMmGSZQkUXXKsVmEIskUVhRCuoLjQYYrEZCOeXHaPXGJwY2FsbCVzKiUo'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('eokuNVQSlIhaksvFwJgduHbdGfEYXLLkmwkcsDQtAMWeWweyiAYqjXY')))
+    
+    return analysis
+end
+
+function AdvancedScannerEngine:getAdvancedProperties(instance)
+    local properties = {}
+    local function safeGet(propName)
+        local s, v = pcall(function() return instance[propName] end)
+        if s then properties[propName] = v end
+    end
+    
+    safeGet(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('XcSTAHfOVJeuPsaiiNbBVhWLjcPcWUwOgJkUZQguEIQHELZjVuBGxZhQXJjaGl2YWJsZQ=='))
+    safeGet(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('mHGmetWZqsEywBJxmNjdPHjmfeHyVZQHAVxWgXtTHCbaQCADwKxmxSiQ2xhc3NOYW1l'))
+    
+    if self:isScript(instance) then
+        safeGet(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('suvDfnuKOQyVSPdtYTLnfaNZAZmYrnCyrUqwXIQHmlBJrttcngEMzFnRGlzYWJsZWQ='))
+        safeGet(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TRlPfOiEqtGwOInKVDOGqaZXPzGnJckhxoolBEiUtJNImJbSEaanvfmUnVuQ29udGV4dA=='))
+        safeGet(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('CfdKliHQPOiEMKShBKqjFAldYjKNOZtecpelCBxFOkzStJNfjOEQqwiTGlua2VkU291cmNl'))
+    elseif self:isRemote(instance) then
+        local name = string.lower(instance.Name)
+        local antiCheatTerms = {hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('uVwrAvMbCILUqhrVBiyXSFjPdAYLhkbOnlNDGVhvDFWEtALXWzfwcreY2hlY2s='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('AkRLMbLrvXEIKRfcMzIzLUyXWfMVJJkrMkbxUaExkPXxUZchHRpFxQCZGV0ZWN0'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ifJJIqFULYmjqlhSLFzDSoKHksaNXDDdOCnfEdqZtEkJHcyHoSrIByfYW50aQ=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('bmmWbQBsOttCiNWdxzOYfTqMKLtaiWglrMQLwMHdqOKOREXKJIfEFIcc2VjdXJl'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('hmffljKbosApDotoNCGSfisQJnpeazykasGgVTIiSQTqlnJVQFftXTVdmVyaWZ5'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('DQyiHhHpZKCSUfejZyeNRtnLrKFStGgQTRnMFDmIHvftdzPuXTniYjSYmFu'), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('oDsktEDWXWBdjeFPivzMjuMqJhvQCzgkAefBRtoAXGzezUMvFfxTolla2ljaw=='), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('KhUjEMOOVWvotUCAwErMtkvtLsSvYCyClMpKwqBgobQwkUlzviiMjqrdmFsaWRhdGU=')}
+        properties.isAntiCheatRelated = false
+        for _, term in ipairs(antiCheatTerms) do
+            if string.find(name, term, 1, true) then
+                properties.isAntiCheatRelated = true
+                break
+            end
+        end
+    end
+    return properties
+end
+
+function AdvancedScannerEngine:recordInstance(instance)
+    local path = self:safeGetFullName(instance)
+    if self.scannedData.instances[path] then return self.scannedData.instances[path] end -- Avoid redundant processing
+
+    local success, metadata = pcall(function()
+        local data = {
+            instance = instance, -- Keep a reference
+            name = instance.Name,
+            className = instance.ClassName,
+            path = path,
+            properties = self:getAdvancedProperties(instance),
+            parentPath = instance.Parent and self:safeGetFullName(instance.Parent) or hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('NzMlMsIXAzGHboRVtMlxDpKGjlMlDiOUawxKPYwBxejYRNKeBpfeqatbmls'),
+            tags = instance:GetAttribute(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('RYHHVuGFzNWliPrBoCarENzyRGTZdBHypgSnyYFahKhnMsxrBbwoiJVVGFncw==')) or {}
+        }
+        
+        self.scannedData.instances[path] = data
+        self.scanStats.total = self.scanStats.total + 1
+        
+        if self:isScript(instance) then
+            data.isScript = true
+            data.scriptType = instance.ClassName
+            data.source = self:safeGetSource(instance)
+            data.isObfuscated, data.obfuscationConfidence, data.obfuscationEvidence = self:checkObfuscation(data.source)
+            data.syntaxAnalysis = self:analyzeScriptSyntax(data.source)
+            self.scannedData.scripts[path] = data
+            self.scanStats.scripts = self.scanStats.scripts + 1
+            if data.isObfuscated then self.scanStats.obfuscatedScripts = self.scanStats.obfuscatedScripts + 1 end
+        elseif self:isRemote(instance) then
+            data.isRemote = true
+            data.remoteType = instance.ClassName
+            self.scannedData.remotes[path] = data
+            self.scanStats.remotes = self.scanStats.remotes + 1
+        end
+        
+        return data
+    end)
+    
+    if not success then
+        self.scanStats.errors = self.scanStats.errors + 1
+        -- Log error if needed
+        return nil
+    end
+    return metadata
+end
+
+function AdvancedScannerEngine:traverse(instance, depth, progressCallback)
+    if depth > self.config.settings.scanDepth or not instance then return end
+    
+    local metadata = self:recordInstance(instance)
+    if not metadata then return end -- Stop traversal if instance recording failed
+    
+    -- Update progress
+    if progressCallback and self.scanStats.total % self.config.settings.maxInstancesPerFrame == 0 then
+        progressCallback(self.scanStats.total)
+        wait() -- Yield to prevent freezing
+    end
+    
+    -- Scan children
+    local success, children = pcall(function() return instance:GetChildren() end)
+    if success and children then
+        for _, child in ipairs(children) do
+            self:traverse(child, depth + 1, progressCallback)
+        end
+    else
+        self.scanStats.errors = self.scanStats.errors + 1
+    end
+end
+
+function AdvancedScannerEngine:scanGame(rootInstance, progressCallback)
+    self.scanDepth = 0
+    self.scannedData = { instances = {}, scripts = {}, remotes = {} }
+    self.scanStats = { total = 0, scripts = 0, remotes = 0, obfuscatedScripts = 0, errors = 0 }
+    
+    local startTime = tick()
+    self:traverse(rootInstance, 0, progressCallback)
+    local endTime = tick()
+    self.scanStats.duration = endTime - startTime
+    
+    return self.scannedData, self.scanStats
+end
+
+--[[----------------------------------------------------------------------------
+--                         REALISTIC DETECTION MODULE
+----------------------------------------------------------------------------]]
+
+local RealisticDetectionModule = {}
+RealisticDetectionModule.__index = RealisticDetectionModule
+
+function RealisticDetectionModule.new(scannerEngine, config)
+    local self = setmetatable({}, RealisticDetectionModule)
+    self.scanner = scannerEngine
+    self.config = config
+    self.detectionRules = config:getEffectiveRules()
+    self.knownSystemProfiles = {} -- Placeholder for known AC profiles
+    self.detectedComponents = {}
+    return self
+end
+
+function RealisticDetectionModule:applyRulesToInstance(instanceData, allData)
+    local detections = {}
+    for _, rule in ipairs(self.detectionRules) do
+        -- Apply sensitivity check
+        if rule.sensitivity and rule.sensitivity < self.config.settings.ruleSensitivity then
+            -- Skip rule if its sensitivity is below the configured threshold
+            goto continue_rule
+        end
+        
+        local success, result = pcall(rule.evaluate, instanceData, allData) -- Pass allData for context
+        if success and result.detected then
+            table.insert(detections, {
+                ruleName = rule.name,
+                description = rule.description,
+                confidence = result.confidence or rule.sensitivity or 0.5, -- Use rule sensitivity as fallback confidence
+                evidence = result.evidence or hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ewMlaAjFFOmplsyjzKVXVjigHuHmZmRPElIdlWpQGgUjpjjjSncAmJJTi9B'),
+                category = rule.category or hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('LJGHggFDMifTcEEejcEelDdbQIaUaBgVdTVsKyocveWlKPSBUaYGqfvR2VuZXJhbA==')
+            })
+        elseif not success then
+            -- Log rule evaluation error
+        end
+        ::continue_rule::
+    end
+    return detections
+end
+
+function RealisticDetectionModule:runDetection(scannedData, progressCallback)
+    self.detectedComponents = {}
+    local count = 0
+    local totalInstances = 0
+    for _ in pairs(scannedData.instances) do totalInstances = totalInstances + 1 end
+    if totalInstances == 0 then return {} end -- Avoid division by zero
+
+    for path, instanceData in pairs(scannedData.instances) do
+        local results = self:applyRulesToInstance(instanceData, scannedData)
+        if #results > 0 then
+            -- Aggregate confidence (simple average for now)
+            local totalConfidence = 0
+            for _, res in ipairs(results) do totalConfidence = totalConfidence + res.confidence end
+            local avgConfidence = totalConfidence / #results
+            
+            self.detectedComponents[path] = {
+                instanceData = instanceData,
+                detections = results,
+                aggregateConfidence = avgConfidence
+            }
+        end
+        
+        count = count + 1
+        if progressCallback and count % 50 == 0 then
+            progressCallback(count / totalInstances)
+            wait() -- Yield
+        end
+    end
+    
+    -- Apply system-wide profile matching (placeholder)
+    -- self:matchSystemProfiles(scannedData)
+    
+    return self.detectedComponents
+end
+
+--[[----------------------------------------------------------------------------
+--                       CONNECTION & BEHAVIOR ANALYZER
+----------------------------------------------------------------------------]]
+
+local ConnectionBehaviorAnalyzer = {}
+ConnectionBehaviorAnalyzer.__index = ConnectionBehaviorAnalyzer
+
+function ConnectionBehaviorAnalyzer.new(scannerEngine, detectionModule, config)
+    local self = setmetatable({}, ConnectionBehaviorAnalyzer)
+    self.scanner = scannerEngine
+    self.detector = detectionModule
+    self.config = config
+    self.connections = {}
+    self.behavioralFlags = {}
+    self.graphData = { nodes = {}, edges = {} }
+    return self
+end
+
+function ConnectionBehaviorAnalyzer:analyze(scannedData, detectedComponents, progressCallback)
+    self.connections = {}
+    self.behavioralFlags = {}
+    self.graphData = { nodes = {}, edges = {} }
+    
+    local totalComponents = 0
+    for _ in pairs(detectedComponents) do totalComponents = totalComponents + 1 end
+    local count = 0
+
+    for path, componentData in pairs(detectedComponents) do
+        -- Analyze explicit connections
+        self:analyzeExplicitConnectionsForComponent(path, componentData, scannedData, detectedComponents)
+        
+        -- Analyze implicit behavior
+        if self.config.settings.enableBehavioralAnalysis then
+            self:analyzeImplicitBehaviorForComponent(path, componentData, scannedData)
+        end
+        
+        count = count + 1
+        if progressCallback and count % 10 == 0 then
+            progressCallback(count / totalComponents)
+            wait() -- Yield
+        end
+    end
+    
+    self:buildGraphData(detectedComponents)
+    
+    return { connections = self.connections, behavioralFlags = self.behavioralFlags, graphData = self.graphData }
+end
+
+function ConnectionBehaviorAnalyzer:analyzeExplicitConnectionsForComponent(path, componentData, scannedData, detectedComponents)
+    if not componentData.instanceData.isScript or not componentData.instanceData.source then return end
+    
+    local source = componentData.instanceData.source
+    
+    -- Check for references to other detected components
+    for otherPath, otherComponentData in pairs(detectedComponents) do
+        if path ~= otherPath then
+            local otherName = otherComponentData.instanceData.name
+            if string.find(source, otherName, 1, true) then
+                table.insert(self.connections, {
+                    from = path,
+                    to = otherPath,
+                    type = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ERdsXKCSCxcYBeGgQWvAWJQdCfEIjeyTpQFkPbcktVueWobsKyHjhZoUmVmZXJlbmNl'),
+                    description = string.format(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('fSkavnjJyljAxrsXMANTTEWlCBBNdYFPpaomtxPuyPmdpfKfVpyKdLsJXMgcmVmZXJlbmNlcyAlcw=='), componentData.instanceData.name, otherName)
+                })
+            end
+            
+            -- Check for remote usage
+            if otherComponentData.instanceData.isRemote then
+                 if string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('GgHIRqJOTlnEKIlbnoRjoJscdTAZeztMuBuxYXzcuVIVCrxDEsFHxvpOg==') .. otherName, 1, true) or string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('kJbKgDKYAWvzsbaWFQvpvDtQCHUsImMdCLbSLJWXkAkhKZLMwczofdrXA==')hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('rZKakxVkyLvnczVwVrISZBRFPJWXtuILsmawViRCFOZtLyNmPLMWvtKIC4uIG90aGVyTmFtZSAuLiA=')\hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('spxmynBYCEiJEFqChIwXpIORJsACZDgZUqLTHzreNSLYDhGjeeVVbEf'), 1, true) then
+                     table.insert(self.connections, {
+                        from = path,
+                        to = otherPath,
+                        type = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('siorMBTAxOzycNglkHVVNrebRYqPrctBeMhouvYCpOcqhDDMfToOyMlUmVtb3RlVXNhZ2U='),
+                        description = string.format(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('dBEKCufztLNVWzuCGiJpLWoYdOcLGKVAIAMunTUapPnTTvtoVlqEqguJXMgdXNlcyByZW1vdGUgJXM='), componentData.instanceData.name, otherName)
+                    })
+                 end
+            end
+        end
+    end
+end
+
+function ConnectionBehaviorAnalyzer:analyzeImplicitBehaviorForComponent(path, componentData, scannedData)
+    if not componentData.instanceData.isScript or not componentData.instanceData.source then return end
+    local source = componentData.instanceData.source
+    local flags = {}
+    
+    -- Example behavioral checks
+    if string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TMUEIJUpnUBETWDVZVGNUJIwPGBJWGpPNbWzoDtOzzLPpVNcUdCctKhUnVuU2VydmljZS5IZWFydGJlYXQ='), 1, true) or string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('brOdDUtNzUDNLarUieWBnGOGJZAJkkrffscFDJgUluKcVKzWeUWZYxHUnVuU2VydmljZS5TdGVwcGVk'), 1, true) then
+        table.insert(flags, { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('SjGWHEYxYCPoHqMYuCtadNCKPHLvgqbtYFdbtYHIdJLPFCyUmbvIZGkRnJlcXVlbnRVcGRhdGVMb29w'), description=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('mMHrwagmVHyxCSNKzHygzZcziTGcMJorIYTdbxvBWVWpukkUWvPxvjcVXNlcyBIZWFydGJlYXQgb3IgU3RlcHBlZCwgcG90ZW50aWFsbHkgZm9yIG1vbml0b3Jpbmc=') })
+    end
+    if string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('AndqbowHnwRBgyCsZTncTbScjorMvCzFWHzDlmZWNevsApFqLFRuSsKUGxheWVycy5Mb2NhbFBsYXllcg=='), 1, true) and string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('eFbuWDqJGijAOMCZIZuNGOwOhPsQzoOecCyTaKoWaTxfoJCjjuWdAoROktpY2s='), 1, true) then
+         table.insert(flags, { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('YrTZQmHDfKLoToIcwlZpqQfpmByKxvbeePhIUDPnGlcxBiqsUsXrvzzQ2xpZW50U2lkZUtpY2s='), description=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('pymbXdLnqFBbDQJTOGBSdUmDSvLXWqCrJfpBOLklpRwfnsRwJGtOHTxU2NyaXB0IGFwcGVhcnMgdG8gaGF2ZSBjbGllbnQtc2lkZSBraWNrIGNhcGFiaWxpdHk=') })
+    end
+    if string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('DxfpSsJfZCtPzIUlGuwbMtsqLYqUyddUOWEsBtDpykLqAnlEVVoKNGVZGVidWcuZ2V0aW5mbw=='), 1, true) or string.find(source, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('KSHWpjMwVRDSZFwGFNzDfurmgxJnkBlDVdJrVSEqZpTAwJNzvNIhQgJZGVidWcuZ2V0ZmVudg=='), 1, true) then
+         table.insert(flags, { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('gszhsXIiOwCGgypsKmZnmgiEfuJzFTHlMISovjblfJwntOZXgnoYYSSRGVidWdMaWJyYXJ5VXNhZ2U='), description=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('BAuquZbiNwSuTyHPAEoaiLzcbYdyTLBmtuvRcPzXqiBpNbPTncEOpZmVXNlcyBkZWJ1ZyBsaWJyYXJ5LCBwb3RlbnRpYWxseSBmb3IgaW50cm9zcGVjdGlvbiBvciBhbnRpLWRlYnVn') })
+    end
+    
+    if #flags > 0 then
+        self.behavioralFlags[path] = flags
+    end
+end
+
+function ConnectionBehaviorAnalyzer:buildGraphData(detectedComponents)
+    self.graphData = { nodes = {}, edges = {} }
+    -- Populate nodes
+    for path, componentData in pairs(detectedComponents) do
+        table.insert(self.graphData.nodes, {
+            id = path,
+            label = componentData.instanceData.name,
+            className = componentData.instanceData.className,
+            confidence = componentData.aggregateConfidence
+        })
+    end
+    -- Populate edges
+    for _, conn in ipairs(self.connections) do
+        table.insert(self.graphData.edges, {
+            from = conn.from,
+            to = conn.to,
+            type = conn.type
+        })
+    end
+end
+
+--[[----------------------------------------------------------------------------
+--                         PROFESSIONAL UI MODULE
+----------------------------------------------------------------------------]]
+-- (Implementation is complex and depends heavily on UI library/framework)
+-- This section will be a simplified placeholder structure
+
+local ProfessionalUIModule = {}
+ProfessionalUIModule.__index = ProfessionalUIModule
+
+function ProfessionalUIModule.new(analyzerInstance)
+    local self = setmetatable({}, ProfessionalUIModule)
+    self.analyzer = analyzerInstance
+    self.guiElements = {}
+    self.currentView = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('AAXGRrPeyJlpWUQgsWMvtBuLlLYcLSQloGEtDxfNaRSRsEoSosPRzEzZGFzaGJvYXJk')
+    self.filterSettings = { minConfidence = 0.1, categories = {} }
+    self.scanReport = nil
+    return self
+end
+
+function ProfessionalUIModule:createMainUI()
+    -- Destroy existing UI if present
+    local existingGui = LOCAL_PLAYER and LOCAL_PLAYER.PlayerGui:FindFirstChild(TOOL_NAME .. hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('NBDJUhxOeGWCeUmFhUYKpTuOvZTczKnMMPiWTjBXKeFQHFQFopbGnMCX0dVSQ=='))
+    if existingGui then existingGui:Destroy() end
+    
+    local screenGui = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('lBNLHfkpRRHtlGXYqZajMlcJcCOhPKVcHVkbJLGZNbuctbhUdOhjbGXU2NyZWVuR3Vp'))
+    screenGui.Name = TOOL_NAME .. hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('HysqSsOxNCCDeVYRQCyKhymuyhKiLNJjYLgopVgyNgoxlZLmNfIpZurX0dVSQ==')
+    screenGui.ResetOnSpawn = false
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    screenGui.Parent = LOCAL_PLAYER.PlayerGui
+    
+    -- Main Frame (Draggable, Resizable - simplified)
+    local mainFrame = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('lWhKumDHUmRZlNrskBbggYHDWaoRsZDtUQEEoXgVtIqWCSeNluSASvKRnJhbWU='))
+    mainFrame.Name = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('bqNVMdesTNUTpDvVmQkAJFOzFAIgNKdSeLsHMHelQPEyVnQIYGlsKKoTWFpbkZyYW1l')
+    mainFrame.Size = UDim2.new(0.6, 0, 0.7, 0) -- Relative size
+    mainFrame.MinSize = Vector2.new(600, 400)
+    mainFrame.Position = UDim2.new(0.2, 0, 0.15, 0)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(35, 38, 41) -- Dark theme
+    mainFrame.BorderSizePixel = 1
+    mainFrame.BorderColor3 = Color3.fromRGB(60, 63, 66)
+    mainFrame.Active = true
+    mainFrame.Draggable = true
+    mainFrame.Parent = screenGui
+    Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('lsobajtjsnUdyNuWbWhcXjWVnbodlHINwaxuaNtipOjUKuhDQANczewVUlDb3JuZXI='), mainFrame).CornerRadius = UDim.new(0, 6)
+
+    -- Title Bar
+    local titleBar = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ZQNmFGQGNPOBBkqMqShZWxnXXYkltakWSlxAjhNyoglPncrfLIWbVuJRnJhbWU='))
+    titleBar.Name = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('FAccNGGXVljwkEkoHrenBzuBXalSNzTntAhEoKgbEGquSWnuRJtDOBUVGl0bGVCYXI=')
+    titleBar.Size = UDim2.new(1, 0, 0, 35)
+    titleBar.BackgroundColor3 = Color3.fromRGB(45, 48, 51)
+    titleBar.Parent = mainFrame
+    Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('NgcXBrXzvcPtJdiABTbCBoEkGhxdhjIZnZeGYAxHpGGWkVkpcZqlSxaVUlDb3JuZXI='), titleBar).CornerRadius = UDim.new(0, 6)
+    -- Cover bottom corners
+    local cover = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('vUkFvfbTsvNhUUbQJwWIEYjTlNofQDHplYIXZsymUaJBnrgpHeZtvdPRnJhbWU='), titleBar)
+    cover.Size = UDim2.new(1,0,0,10); cover.Position=UDim2.new(0,0,1,-10); cover.BackgroundColor3=titleBar.BackgroundColor3; cover.BorderSizePixel=0; cover.ZIndex=titleBar.ZIndex
+
+    local titleLabel = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('SnDLnuODhBTJmrVEFhhrosHPRrGZyluyMDVxtmaYLSYdcdfEtzwoWHnVGV4dExhYmVs'), titleBar)
+    titleLabel.Size = UDim2.new(1, -40, 1, 0); titleLabel.Position = UDim2.new(0, 10, 0, 0)
+    titleLabel.BackgroundTransparency = 1; titleLabel.Font = Enum.Font.GothamSemibold
+    titleLabel.Text = TOOL_NAME .. hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('FuzaktvKGtwxMQzVPxdBapKYikDlUeFAeqPCwabjkiTdUTfgZOQAvpXIHY=') .. TOOL_VERSION; titleLabel.TextColor3 = Color3.fromRGB(220, 220, 220)
+    titleLabel.TextSize = 16; titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    local closeButton = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('tdLtOTyawTZjvpTOYuEvHrxVJjBjELvitamKxvzXfbWfBiLCCaupVswVGV4dEJ1dHRvbg=='), titleBar)
+    closeButton.Size = UDim2.new(0, 25, 0, 25); closeButton.Position = UDim2.new(1, -30, 0.5, -12.5)
+    closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50); closeButton.Text = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ksdyfbSsWSIQvQEkSxOgARYmPbildlqGtAAHpUAIuphDZSUOzHHTYxVWA=='); closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.Font = Enum.Font.GothamBold; closeButton.TextSize = 14
+    Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('YFVXCvOjyxUaBztAYnOZcBSSvjOOPuyoKAwfqJuuVDJGVYPXblVMHfTVUlDb3JuZXI='), closeButton).CornerRadius = UDim.new(0, 4)
+    closeButton.MouseButton1Click:Connect(function() screenGui:Destroy() end)
+
+    -- Main Content Area (Placeholder - complex layout needed)
+    local contentArea = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ETHRGAgxpKsVEytzaxApYYcxihYpwXeigiCUnPCjlVQFodcVDIvQfBQRnJhbWU='))
+    contentArea.Name = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('IUCuCljFlwvpmLmnNomlnlcYydePYkFqYJZJdRNihLElChzOxRoNAvKQ29udGVudEFyZWE=')
+    contentArea.Size = UDim2.new(1, -10, 1, -45) -- Below title bar
+    contentArea.Position = UDim2.new(0, 5, 0, 40)
+    contentArea.BackgroundTransparency = 1
+    contentArea.Parent = mainFrame
+    
+    -- Example: Scan Button & Status
+    local scanButton = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('YVhGLIJakpmqziRvRRNxcjMCgXaZhDkCwGFxqkkPOQqIoMakiwYKCptVGV4dEJ1dHRvbg=='), contentArea)
+    scanButton.Name = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('KqAQWlwIUPOhmtdmhPqZgbzFssWCodgRsRnCOOjXpFAJYgTOxvxtnclU2NhbkJ1dHRvbg==')
+    scanButton.Size = UDim2.new(0, 150, 0, 30); scanButton.Position = UDim2.new(0, 10, 0, 10)
+    scanButton.BackgroundColor3 = Color3.fromRGB(0, 122, 204); scanButton.Text = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('AvzZLSmKZSNCtfhujKdYlCFNQqaEaRldrzASxHOXayHjgWJAByLPIiSU3RhcnQgRnVsbCBTY2Fu')
+    scanButton.TextColor3 = Color3.white; scanButton.Font = Enum.Font.GothamMedium; scanButton.TextSize = 14
+    Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('GPuthKHZTtptqUEwDcFElklMwAEeuBfEvnBKtCgQOFSWXsocuGUEZowVUlDb3JuZXI='), scanButton).CornerRadius = UDim.new(0, 4)
+    
+    local statusLabel = Instance.new(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('bnBAQkjTHfPFxLSfApfRIHLAPTlHeWReRakuARNxeGytvjUHOoCOWGFVGV4dExhYmVs'), contentArea)
+    statusLabel.Name = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('tWYfhbyBNvbzoiXRoENFnBStEURAvCaAArvdybgwWWZxJSHJVSemAFZU3RhdHVzTGFiZWw=')
+    statusLabel.Size = UDim2.new(1, -170, 0, 30); statusLabel.Position = UDim2.new(0, 170, 0, 10)
+    statusLabel.BackgroundTransparency = 1; statusLabel.Font = Enum.Font.Gotham
+    statusLabel.Text = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('byweNRBhoTnfVtOGZhSeQxhSzlfJNJObYQTCTaBzBXoqxvwuTSJRseFUmVhZHku'); statusLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+    statusLabel.TextSize = 13; statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    self.guiElements = { screenGui=screenGui, mainFrame=mainFrame, scanButton=scanButton, statusLabel=statusLabel }
+
+    -- Connect Scan Button
+    scanButton.MouseButton1Click:Connect(function()
+        if scanButton.Text == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('oCfOgqVHreYZjPBBZsDrGZUKNEmFicSifimGWTkmeqGTdkApgmcWwEXU3RhcnQgRnVsbCBTY2Fu') or scanButton.Text == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('JVkrTbWEgUKbOObTnAGaLoQSemEKIVhwMAdGTXTkvphuIYlDNWVGFegU2NhbiBBZ2Fpbg==') then
+            self.analyzer:runAnalysis()
+        end
+    end)
+    
+    print(TOOL_NAME .. hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('kzzXCERqoKSBvRwaPaJYZpgKNLwhmyQfArDlDITsjyVhKOHdxucvUfAIFVJIEluaXRpYWxpemVkLg=='))
+end
+
+function ProfessionalUIModule:updateProgress(stage, percentage, message)
+    if not self.guiElements.statusLabel then return end
+    self.guiElements.statusLabel.Text = string.format(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('pGrrrQKjRKjyqHuQXxnHGTwUYRIVesvGnnbohKxtEuWlXRFGCijgIjaJXMgKCUuMGYlJSkgLSAlcw=='), stage, percentage * 100, message or hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('vRLIuIBtbVtprNsdGJHdSrUfyBPkvSaeLtXMHYqwqUZPusoXHhziVKq'))
+    -- Update progress bar if implemented
+end
+
+function ProfessionalUIModule:displayResults(report)
+    self.scanReport = report
+    if not self.guiElements.statusLabel then return end
+    self.guiElements.statusLabel.Text = string.format(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ZhuxbfCweOPhMBXdbzhAkGOVQpGijDImYimGEvcICKmwgzTJyNuwYfDU2NhbiBDb21wbGV0ZS4gRm91bmQgJWQgcG90ZW50aWFsIGNvbXBvbmVudHMuIER1cmF0aW9uOiAlLjJmcw=='), #report.detailedDetections, report.metadata.duration or 0)
+    self.guiElements.scanButton.Text = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('cOpOhxYFhwMuYftWUpFcOWnFrRAqVRCUugmrDblyNVFLfWXzVytntuEU2NhbiBBZ2Fpbg==')
+    -- TODO: Populate detailed views (requires significant UI work)
+    print(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TWkMDiBsCeqKmTDSTrSvxXitJWhNLPIPqJZlQnvhpBleGtpIyUuYxxlRGlzcGxheWluZyByZXN1bHRzIChwbGFjZWhvbGRlcikuIFJlcG9ydCBnZW5lcmF0ZWQu'))
+end
+
+--[[----------------------------------------------------------------------------
+--                       EDUCATIONAL REPORTING SYSTEM
+----------------------------------------------------------------------------]]
+
+local EducationalReportingSystem = {}
+EducationalReportingSystem.__index = EducationalReportingSystem
+
+function EducationalReportingSystem.new(scanner, detector, analyzer, config)
+    local self = setmetatable({}, EducationalReportingSystem)
+    self.scanner = scanner
+    self.detector = detector
+    self.analyzer = analyzer
+    self.config = config
+    return self
+end
+
+function EducationalReportingSystem:generateReport(analysisResults, scanStats)
+    local report = {
+        metadata = { 
+            timestamp = os.time(), 
+            gameId = game.PlaceId, 
+            toolVersion = TOOL_VERSION,
+            scanDuration = scanStats.duration,
+            settings = self.config.settings -- Include settings used for the scan
+        },
+        summary = self:generateSummary(scanStats, analysisResults),
+        detailedDetections = self:formatDetections(),
+        connectionAnalysis = self:formatConnections(analysisResults.connections),
+        behavioralAnalysis = self:formatBehavior(analysisResults.behavioralFlags),
+        -- systemProfileMatches = self:formatProfileMatches(), -- Placeholder
+        educationalContext = self:provideEnhancedContext()
+    }
+    return report
+end
+
+function EducationalReportingSystem:generateSummary(scanStats, analysisResults)
+    local detectedCount = 0
+    for _ in pairs(self.detector.detectedComponents) do detectedCount = detectedCount + 1 end
+    
+    return {
+        totalScanned = scanStats.total,
+        scriptsScanned = scanStats.scripts,
+        remotesScanned = scanStats.remotes,
+        obfuscatedScripts = scanStats.obfuscatedScripts,
+        scanErrors = scanStats.errors,
+        detectedComponents = detectedCount,
+        connectionsFound = #analysisResults.connections,
+        behavioralFlags = #analysisResults.behavioralFlags
+    }
+end
+
+function EducationalReportingSystem:formatDetections()
+    local formatted = {}
+    for path, componentData in pairs(self.detector.detectedComponents) do
+        local detectionInfo = {
+            path = path,
+            name = componentData.instanceData.name,
+            className = componentData.instanceData.className,
+            aggregateConfidence = componentData.aggregateConfidence,
+            detections = {}
+        }
+        for _, det in ipairs(componentData.detections) do
+            table.insert(detectionInfo.detections, {
+                rule = det.ruleName,
+                category = det.category,
+                confidence = det.confidence,
+                description = det.description,
+                evidence = det.evidence
+            })
+        end
+        -- Add script source snippet if applicable and detected
+        if componentData.instanceData.isScript and componentData.instanceData.source then
+             detectionInfo.sourceSnippet = string.sub(componentData.instanceData.source, 1, 200) .. ( #componentData.instanceData.source > 200 and hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('wsGvdYFEUDumVIYoYiRhcAzitfileDoJtiCsYDVREVTHckjtYccxaZKLi4u') or hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('FrDLbJgKnPpXhAhaibNnVNljIUBIKNMLetOyIqDnBoreoGtKaaxDvVj'))
+        end
+        table.insert(formatted, detectionInfo)
+    end
+    -- Sort by confidence
+    table.sort(formatted, function(a,b) return a.aggregateConfidence > b.aggregateConfidence end)
+    return formatted
+end
+
+function EducationalReportingSystem:formatConnections(connections)
+    -- Format connection data for display/export
+    return connections -- Simple format for now
+end
+
+function EducationalReportingSystem:formatBehavior(flags)
+    -- Format behavioral flags for display/export
+    return flags -- Simple format for now
+end
+
+function EducationalReportingSystem:provideEnhancedContext()
+    -- Load detailed educational text from research_findings.md or similar source
+    return {
+        introduction = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('abgWrqZxxfNFsaTRrqYRnlOSfRgdbPaSffveFnXJhaWSrXFAmSaesCaVGhpcyByZXBvcnQgcHJvdmlkZXMgYW4gZWR1Y2F0aW9uYWwgYW5hbHlzaXMgb2YgcG90ZW50aWFsIGFudGktY2hlYXQgbWVjaGFuaXNtcy4uLg=='),
+        techniqueExplanations = { -- Detailed explanations of techniques found
+            { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('KetmhWuWxveyKTMqEyShxpIvRZguLymqSsOBVhOxHzfvvHkkJaCaIGUTWV0YW1ldGhvZCBIb29raW5n'), details=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('cynAlLZYlQsqUjWvDxDdYYQjNcVoFOxExNTstAtZEmjTvcpikqxXVmdLi4u') },
+            { name=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('wBTurxZUFIXjyzspDjSNegDlYuJOWBjVGlfKRzBxAYteuqskPwXJwMKUmVtb3RlIEV2ZW50IFZhbGlkYXRpb24='), details=hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('bQIiyfkJdxIBbcdhvOvTtrWHqCMQOYhCJGraVcZjYArEMThFbKFyWhYLi4u') },
+        },
+        ethicalConsiderations = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('mCyRrYGHZykRUglnkcuqorvfURxTUPZQREPLIUmDtixsuxHDOEKYMyOUmVtZW1iZXIgdG8gdXNlIHRoaXMgaW5mb3JtYXRpb24gcmVzcG9uc2libHkuLi4='),
+        disclaimer = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('pvGQZDCmBpzpkQzNoMTNvPLqtFLeLqjzOKUEuQLPrOnkxqriereAOonVGhpcyB0b29sIGlzIGZvciBlZHVjYXRpb25hbCBwdXJwb3NlcyBvbmx5Li4u')
+    }
+end
+
+--[[----------------------------------------------------------------------------
+--                         MAIN ANALYZER CLASS
+----------------------------------------------------------------------------]]
+
+local EnhancedAntiCheatAnalyzer = {}
+EnhancedAntiCheatAnalyzer.__index = EnhancedAntiCheatAnalyzer
+
+function EnhancedAntiCheatAnalyzer.new()
+    local self = setmetatable({}, EnhancedAntiCheatAnalyzer)
+    print(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('YUeOgJnNGbYXVrXlHfsaNeJtxvYzcMVoxOKYjlEKOsvdumcfMswdCMnSW5pdGlhbGl6aW5nIA==') .. TOOL_NAME .. hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('eeeGsggyjkxMBcCIfhPAWobYXftQavGBzkPnTxiHtJZHubbGgItiaukIHY=') .. TOOL_VERSION)
+    self.config = ConfigurationModule.new()
+    self.scanner = AdvancedScannerEngine.new(self.config)
+    self.detector = RealisticDetectionModule.new(self.scanner, self.config)
+    self.analyzer = ConnectionBehaviorAnalyzer.new(self.scanner, self.detector, self.config)
+    self.reporter = EducationalReportingSystem.new(self.scanner, self.detector, self.analyzer, self.config)
+    self.ui = ProfessionalUIModule.new(self)
+    self.isScanning = false
+    return self
+end
+
+function EnhancedAntiCheatAnalyzer:initialize()
+    self.ui:createMainUI()
+end
+
+function EnhancedAntiCheatAnalyzer:runAnalysis()
+    if self.isScanning then 
+        print(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('zKndpqwhCYspkBBWfaRmlCZuxXfudLYaBsDybciGaNnANPIPBzbdOiAU2NhbiBhbHJlYWR5IGluIHByb2dyZXNzLg=='))
+        return 
+    end
+    self.isScanning = true
+    self.ui.guiElements.scanButton.Text = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('jGEUbRaqBbHCOuYkdVRAarGQJKKfNInZOPJJqwYAMxcwojEiAtbrKJRU2Nhbm5pbmcuLi4=')
+    self.ui.guiElements.scanButton.Active = false
+
+    -- Run analysis steps in a coroutine to avoid blocking
+    coroutine.wrap(function()
+        local success, result = pcall(function()
+            -- 1. Scan Game
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('JQwFZMFiyKteROlzxrbGCUQilEaSfSvUNNrBERZaqzameVIQhcFfkCiU2Nhbm5pbmc='), 0, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('tNmGsxgOKVpAuGsMwUbzYqvOjgpdGczYUbjYbPdByuwlgxCATPkaUNSU3RhcnRpbmcgZ2FtZSB0cmF2ZXJzYWwuLi4='))
+            local scannedData, scanStats = self.scanner:scanGame(game, function(count)
+                self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('lhFjKTiLhqEMxDjwlwcxfulbgEnfDEjKaCJmXDLnctzHuxqDtHSSPOzU2Nhbm5pbmc='), count / (scanStats.total + 1), hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('sjuFtqNzxKwKhwdnyrCtrgFNqWOymGjvRicFXirsKQHCPUCamUwWUqvVHJhdmVyc2luZyBpbnN0YW5jZXMuLi4=')) -- Estimate total
+            end)
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('xWUIgutHPcjlhbaGEDwStRBsEMSQRojuZRRJTYQmPNONNPAhpdSJhzMU2Nhbm5pbmc='), 1, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('DiYFPDSRqiPbKGILREDMDFScBcwVaQVEhUwbagrRewlQfBgiuZttEnAU2NhbiBjb21wbGV0ZS4='))
+            
+            -- 2. Run Detection
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('lDjUzhzXrNHMzaXaDjOdcRHeKelHwlYBmXZFLKXgabgsYXbmoCFMTMNRGV0ZWN0aW5n'), 0, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('wQNCAHDLWGiPNaiXeVkkNROvADeQPyHfkcPpSCuQylvvUzfNCxgwMlKQXBwbHlpbmcgZGV0ZWN0aW9uIHJ1bGVzLi4u'))
+            local detectedComponents = self.detector:runDetection(scannedData, function(progress)
+                self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('yQykpMFHPvMdQvMUvcRLnkyrctcYxxudTnlJcQGgPrwynUlgmfvozOpRGV0ZWN0aW5n'), progress, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('bZFWtMQBTuYNdXXYPNWNGTChBeeeHlNlyBZHBhfOCPWOdWdCRQCCGpXQW5hbHl6aW5nIGNvbXBvbmVudHMuLi4='))
+            end)
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TONNitLPoqnxWmRbLQUjXOhOBybtuJsACLfnxvOcvVrqVHhYQDfiCGZRGV0ZWN0aW5n'), 1, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('TLEbjSNmxbvSOoXSRstjeOqOLmUbjCoVIaZBkKDmfzumINvsRTdCLMkRGV0ZWN0aW9uIGNvbXBsZXRlLg=='))
+            
+            -- 3. Analyze Connections & Behavior
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('SphkvaDsAkrvFYFHHieBahfLbHpPNskpzfTuiXmKPnFXhETJpytknhiQW5hbHl6aW5n'), 0, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('FmJsXDFMnxsWYDtxUWmVHbIExkPBllYfifiImlUgtQrFeruuLkViMuATWFwcGluZyBjb25uZWN0aW9ucy4uLg=='))
+            local analysisResults = self.analyzer:analyze(scannedData, detectedComponents, function(progress)
+                self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ZCnjVjIlPcWQmBjASNyhrytolwbWPgoYoojTxvxMpGopmmCYjDOaBmiQW5hbHl6aW5n'), progress, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('fkBgmNJJBpkTWXDyDbUOrImrWjXiDWXAbIeiKSwkuobylwGncNuzRdzQW5hbHl6aW5nIHJlbGF0aW9uc2hpcHMuLi4='))
+            end)
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('KpmxxnuPBYirDMgJvjeNQebZhEZnQlUaFqvafGCuFIoRZJOceIJDVZlQW5hbHl6aW5n'), 1, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('WKTHYAQARFhsyoLfBVKgtWJuxwMkurYByLPItUqFCtBYiVnxwkTrXJdQW5hbHlzaXMgY29tcGxldGUu'))
+            
+            -- 4. Generate Report
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('lPaQbCtuavIfsLkvnxvCemrruOLCOitLkVBcEiFMSwjDfGbsPxSMniJUmVwb3J0aW5n'), 0.5, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('baoGQWObIukCcaEwQAKyrxRoubfKZyqWBnfHSRjdQVUNMMcrAfwwZQHR2VuZXJhdGluZyBmaW5hbCByZXBvcnQuLi4='))
+            local report = self.reporter:generateReport(analysisResults, scanStats)
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('JzlKgFpYsfSEWCyVIBNKmhJWokJvCweiaBSKbQnJRijvNJzScYjXdavUmVwb3J0aW5n'), 1, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('hxxLnfSwlOCXKjLqNvsrgMmEeilLtxIaYhHgGOKneHZBZAXNglbeaXhUmVwb3J0IGdlbmVyYXRlZC4='))
+            
+            -- 5. Display Results
+            self.ui:displayResults(report)
+        end)
+
+        if not success then
+            warn(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('xxvocowAMkqlbHouHenTEpuJpqZxygQFUAhMOfqqvsHOilCRvnryFwZQW50aS1DaGVhdCBBbmFseXNpcyBFcnJvcjog'), result)
+            self.ui:updateProgress(hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('qRePnUvugOiZAmduYjRsOBgYDYJhLcBylULKpyUlNlNZaSmGeHBIFpyRXJyb3I='), 1, hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('ByTkXNfrrExbRkxLlXojnmbiPNzMmMyevYwvdJWkpGMiJFynmwFHzaHQW4gZXJyb3Igb2NjdXJyZWQgZHVyaW5nIGFuYWx5c2lzLg=='))
+            self.ui.guiElements.scanButton.Text = hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('AIEEXFJCEpjwDCVUNYACvTwtymQJDPMULJWvLbFaVeOTusciXOjLHauRXJyb3IgLSBTY2FuIEFnYWlu')
+        end
+        
+        self.isScanning = false
+        self.ui.guiElements.scanButton.Active = true
+        if self.ui.guiElements.scanButton.Text == hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('VQuHaOMlJhZlNEpWaZOtJLFaGjZFCzPVgvAcQsXewLuLZvYbbvLlGjyU2Nhbm5pbmcuLi4=') then -- If no error occurred but text wasnhVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('zmNyRBfMsROuuzXkvCpjiFzcqlgaZMBWbTJLIjDaHGoJkmXJpzujvOOdCB1cGRhdGVkDQogICAgICAgICAgICAgc2VsZi51aS5ndWlFbGVtZW50cy5zY2FuQnV0dG9uLlRleHQgPSA=')Scan AgainhVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('PdHpbezVMyFBoTCWNRZIBKIzVKxsXMrCYLDbtqJeeRuAcJRnlKFwhfhDQogICAgICAgIGVuZA0KICAgIGVuZCkoKQ0KZW5kDQoNCi0tW1stLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQotLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSU5JVElBTElaQVRJT04NCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dXQ0KDQpsb2NhbCBmdW5jdGlvbiBtYWluKCkNCiAgICAtLSBFbnN1cmUgb25seSBvbmUgaW5zdGFuY2UgcnVucw0KICAgIGlmIENvcmVHdWk6RmluZEZpcnN0Q2hpbGQoVE9PTF9OQU1FIC4uIA==')_InstanceMarkerhVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('oBjQPYcwkjPnQwIpnDAkpPbzUbqEYotGaAIWDVTQodBwYYITWiqYmTEKSB0aGVuDQogICAgICAgIHByaW50KFRPT0xfTkFNRSAuLiA=') is already running.hVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('zdgAfQSxhZhpZsjEMyjUzCwMNdlRlPuXHnWHvbTjWNydJWVhFWbiycVKQ0KICAgICAgICByZXR1cm4NCiAgICBlbmQNCiAgICBsb2NhbCBtYXJrZXIgPSBJbnN0YW5jZS5uZXco')ObjectValuehVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('avBOrUjhtYmNROYdpNjHKAUOPCtRYIgMxsLkRdYTNKXXAGjURuaNWftLCBDb3JlR3VpKQ0KICAgIG1hcmtlci5OYW1lID0gVE9PTF9OQU1FIC4uIA==')_InstanceMarkerhVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('WDoeHuzbiTiUrnatKNRftbnUJuqqzakXDWPeqmMomrpFRGkytzrTyKdDQogICAgDQogICAgbG9jYWwgYW5hbHl6ZXIgPSBFbmhhbmNlZEFudGlDaGVhdEFuYWx5emVyLm5ldygpDQogICAgYW5hbHl6ZXI6aW5pdGlhbGl6ZSgpDQogICAgDQogICAgLS0gQ2xlYW51cCBtYXJrZXIgd2hlbiBHVUkgaXMgY2xvc2VkDQogICAgbG9jYWwgZ3VpID0gYW5hbHl6ZXIudWkuZ3VpRWxlbWVudHMuc2NyZWVuR3VpDQogICAgaWYgZ3VpIHRoZW4NCiAgICAgICAgZ3VpLkRlc3Ryb3lpbmc6Q29ubmVjdChmdW5jdGlvbigpDQogICAgICAgICAgICBsb2NhbCBleGlzdGluZ01hcmtlciA9IENvcmVHdWk6RmluZEZpcnN0Q2hpbGQoVE9PTF9OQU1FIC4uIA==')_InstanceMarkerhVvqKksBwunWJZhdXEVcLVIroIMlctUsPqVmxIVOcyzvdQDkSgQtgMibOXFIezNzEMDkdghHHzmuKFpYRDbCxeXYmfzDHwFIk('eimxSqUlUGbFUyxqMiwmvuylzmfjcknAYqyajucNhJsOSNmhnleXvqtKQ0KICAgICAgICAgICAgaWYgZXhpc3RpbmdNYXJrZXIgdGhlbiBleGlzdGluZ01hcmtlcjpEZXN0cm95KCkgZW5kDQogICAgICAgICAgICBwcmludChUT09MX05BTUUgLi4g') stopped.')
+        end)
+    end
+end
+
+-- Run the main function safely
+pcall(main)
+
+
+    
